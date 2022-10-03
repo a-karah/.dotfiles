@@ -5,7 +5,11 @@
    <key>Label</key>
    <string>com.user.loginscript</string>
    <key>ProgramArguments</key>
-   <array><string>/Users/akarahan/.macos.sh</string></array>
+   <array>
+      <string>/bin/bash</string>
+      <string>-c</string>
+      <string>$HOME/.macos.sh</string>
+   </array>
    <key>RunAtLoad</key>
    <true/>
 </dict>
