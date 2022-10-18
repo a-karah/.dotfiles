@@ -50,3 +50,8 @@ export USER=akarahan
 export MAIL=akarahan@student.42istanbul.com.tr
 
 eval "$(starship init zsh)"
+
+# Activate dark mode if it is not activated
+if [[ -x $(command -v dark-mode) && $(dark-mode status) == "off" ]]; then
+	dark-mode
+fi
