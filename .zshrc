@@ -1,11 +1,19 @@
+#!/bin/bash
+
+. .dotfiles/install_functions.sh
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/$(USER)/.oh-my-zsh"
+export LANG=en_US.UTF-8
+export USER="akarahan"
+export MAIL="akarahan@student.42istanbul.com.tr"
+export ZSH="/home/$USER/.oh-my-zsh"
 
 # Setting pwn path
 PATH=$PATH:~/.local/bin
+PATH=$PATH:"/Users/$USER/goinfre/homebrew/bin"
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -14,7 +22,7 @@ CASE_SENSITIVE="true"
 # DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to enable command auto-correction.
- ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -28,28 +36,24 @@ CASE_SENSITIVE="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-syntax-highlighting)
 
-source $ZSH/oh-my-zsh.sh
+#source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
+#-----ALIASES-----#
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
-alias gccc="gcc -Wall -Werror -Wextra"
+alias gccc="gcc -Wall -Werror -Wextra -g"
+alias code="open -a 'Visual Studio Code'"
+alias cclean="bash ~/Cleaner_42.sh"
 
-export USER=akarahan
-export MAIL=akarahan@student.42istanbul.com.tr
+#-----INITIALIZATION-----#
+install_homebrew()
+brew_packages()
 
-eval "$(starship init zsh)"
+if [[ -x $(command -v starship) ]]; then
+	eval "$(starship init zsh)"
+fi
 
 # Activate dark mode if it is not activated
 if [[ -x $(command -v dark-mode) && $(dark-mode status) == "off" ]]; then
