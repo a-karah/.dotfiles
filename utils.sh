@@ -8,3 +8,13 @@ function check_shasum() {
 		false
 	fi
 }
+
+function is_installed() {
+	if ! [ -x $(command -v $1) ]; then
+		echo "$1 is installed"
+		true
+	else
+		echo "$1 is not installed"
+		false
+	fi
+}
