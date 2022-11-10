@@ -10,11 +10,13 @@ function check_shasum() {
 }
 
 function is_installed() {
-	if ! [ -x $(command -v $1) ]; then
-		echo "$1 is installed"
-		true
-	else
+	if ! [ -x "$(command -v $1)" ]; then
 		echo "$1 is not installed"
 		false
+		return
+	else
+		echo "$1 is installed"
+		true
+		return
 	fi
 }
