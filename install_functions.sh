@@ -1,15 +1,8 @@
 #!/bin/bash
 
-#. ./utils.sh
+. $HOME/.dotfiles/utils.sh
 
-# returns true when two arguments are different
-function check_shasum() {
-	if [ $(shasum $1 | awk '{print $1}') != $(shasum $2 | awk '{print $1}') ]; then
-		true
-	else
-		false
-	fi
-}
+export brew_bin=/goinfre/$USER/homebrew/bin/brew
 
 # Install homebrew into goinfre
 function install_homebrew() {
@@ -23,9 +16,11 @@ function install_homebrew() {
 }
 
 # Homebrew packages
-function brew_packages() {
+function install_brew_packages() {
 	if ! [ -x "$(command -v wget)" ]; then
-		brew install wget
+		echo "Installing wget"
+		$brew_bin install wget
+		echo "wget is installed"
 	fi
 
 	# Install fonts
@@ -33,46 +28,53 @@ function brew_packages() {
 	#brew install font-ibm-plex --cask
 	#brew install font-blex-mono-nerd-font --cask
 
-	if ! [ -x "$(command -v dark-mode)" ]; then
-		brew install dark-mode
+	if  ! [ -x "$(command -v dark-mode)" ]; then
+		echo "Installing dark-mode"
+		$brew_bin install dark-mode
+		echo "dark-mode is installed"
 	fi
 
-	if ! [ -x "$(command -v starship)" ]; then
-		# Install prompt
-		brew install starship
-		echo "eval \"\$(starship init zsh)\"" >> ~/.zshrc
+	if  ! [ -x "$(command -v starship)" ]; then
+		echo "Installing starship"
+		$brew_bin install starship
+		#echo "eval \"\$(starship init zsh)\"" >> ~/.zshrc
+		echo "starship is installed"
 	fi
 
-	if ! [ -x "$(command -v alacritty)" ]; then
-		brew install alacritty
-	fi
+	# if  ! [ -x "$(command -v alacritty)" ]; then
+	# 	echo "Installing alacritty"
+	# 	$brew_bin install alacritty
+	# 	echo "alacritty is installed"
+	# fi
 }
 
 function copy_dotfiles () {
-	if check_shasum .vimrc ~/.vimrc; then
-		cp .vimrc ~/.vimrc
+	if check_shasum .vimrc $HOME/vimrc; then
+		cp .vimrc $HOME/vimrc
 	fi
-	if check_shasum alacritty.yml ~/.config/alacritty/alacritty.yml; then
-		cp alacritty.yml ~/.config/alacritty/alacritty.yml
+	if check_shasum alacritty.yml $HOME/config/alacritty/alacritty.yml; then
+		cp alacritty.yml $HOME/config/alacritty/alacritty.yml
 	fi
-	if check_shasum .zshrc ~/.zshrc; then
-		cp .zshrc ~/.zshrc
+	if check_shasum .zshrc $HOME/zshrc; then
+		cp .zshrc $HOME/zshrc
 	fi
 }
 
 # Various scripts
 # Install cclean
 function install_cleaner() {
-	if [[ ! -d ~/Cleaner_42 ]]; then
+	if [[ ! -d $HOME/Cleaner_42 ]]; then
+		echo "Installing cleaner-42"
 		git clone https://github.com/ombhd/Cleaner_42.git
-		cd ~/Cleaner_42/CleanerInstaller.sh && ./CleanerInstaller.sh && cd -
+		cd $HOME/Cleaner_42/CleanerInstaller.sh && ./CleanerInstaller.sh && cd -
+		echo "cleaner-42 is installed"
 	fi
 }
 
 function install_ohmyzsh() {
-	if ! [ -x "$(command -v omz)" ]; then
-		# Install oh-my-zsh
+	if  ! [ -x "$(command -v omz)" ]; then
+		echo "Installing oh-my-zsh"
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+		echo "oh-my-zsh is installed"
 	fi
 }
-install_homebrew
