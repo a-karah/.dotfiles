@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. .dotfiles/install_functions.sh
+. $HOME/.dotfiles/install_functions.sh
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -49,7 +49,8 @@ alias cclean="bash ~/Cleaner_42.sh"
 
 #-----INITIALIZATION-----#
 install_homebrew()
-brew_packages()
+install_brew_packages()
+install_ohmyzsh()
 
 if [[ -x $(command -v starship) ]]; then
 	eval "$(starship init zsh)"
