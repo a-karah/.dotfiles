@@ -61,7 +61,7 @@ function copy_dotfiles () {
 	fi
 	if check_shasum $HOME/.dotfiles/.zshrc $HOME/.zshrc; then
 		echo "Copying zshrc to home directory"
-		cp $HOME/.dotfiles/.zshrc $HOME/zshrc
+		cp $HOME/.dotfiles/.zshrc $HOME/.zshrc
 		echo "Done copying"
 	fi
 }
@@ -78,7 +78,8 @@ function install_cleaner() {
 }
 
 function install_ohmyzsh() {
-	if  ! [ -x "$(command -v omz)" ]; then
+	# if  ! [ -x "$(command -v omz)" ]; then
+	if  [[ ! -d  $HOME/.oh-my-zsh ]]; then
 		echo "Installing oh-my-zsh"
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 		echo "oh-my-zsh is installed"
