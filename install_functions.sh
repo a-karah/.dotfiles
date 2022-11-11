@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. $HOME/.dotfiles/utils.sh
+source $HOME/.dotfiles/utils.sh
 
 export brew_bin=/goinfre/$USER/homebrew/bin/brew
 
