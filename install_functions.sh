@@ -52,8 +52,8 @@ function copy_dotfiles () {
 	if check_shasum .vimrc $HOME/vimrc; then
 		cp .vimrc $HOME/vimrc
 	fi
-	if check_shasum alacritty.yml $HOME/config/alacritty/alacritty.yml; then
-		cp alacritty.yml $HOME/config/alacritty/alacritty.yml
+	if check_shasum alacritty.yml $HOME/.config/alacritty/alacritty.yml; then
+		cp alacritty.yml $HOME/.config/alacritty/alacritty.yml
 	fi
 	if check_shasum .zshrc $HOME/zshrc; then
 		cp .zshrc $HOME/zshrc
@@ -76,5 +76,13 @@ function install_ohmyzsh() {
 		echo "Installing oh-my-zsh"
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 		echo "oh-my-zsh is installed"
+	fi
+}
+
+function install_omz_plugins() {
+	if [[ ! -d $HOME/zsh-syntax-highlighting ]]; then
+		echo "Installing zsh-syntax-highlighting"
+		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+		echo "Installed zsh-syntax-highlighting"
 	fi
 }
