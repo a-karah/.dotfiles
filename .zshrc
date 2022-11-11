@@ -1,6 +1,11 @@
 #!/bin/bash
 
-. $HOME/.dotfiles/install_functions.sh
+source $HOME/.dotfiles/install_functions.sh
+
+# Temporary fix to "Insecure completion-dependent directories detected"
+if [[ $(uname -s) == Darwin ]]; then
+	ZSH_DISABLE_COMPFIX=true
+fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -10,6 +15,8 @@ export LANG=en_US.UTF-8
 export USER="akarahan"
 export MAIL="akarahan@student.42istanbul.com.tr"
 export ZSH="$HOME/.oh-my-zsh"
+
+source $ZSH/oh-my-zsh.sh
 
 # Setting path
 PATH=$PATH:~/.local/bin
@@ -29,19 +36,12 @@ ENABLE_CORRECTION="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Temporary fix to "Insecure completion-dependent directories detected"
-if [[ $(uname -s) == Darwin ]]; then
-	ZSH_DISABLE_COMPFIX=true
-fi
-
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting)
-
-source $ZSH/oh-my-zsh.sh
+plugins=(git macos zsh-syntax-highlighting)
 
 # User configuration
 
