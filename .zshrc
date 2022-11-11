@@ -9,11 +9,11 @@
 export LANG=en_US.UTF-8
 export USER="akarahan"
 export MAIL="akarahan@student.42istanbul.com.tr"
-export ZSH="/home/$USER/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
-# Setting pwn path
+# Setting path
 PATH=$PATH:~/.local/bin
-PATH=$PATH:"/Users/$USER/goinfre/homebrew/bin"
+PATH=$PATH:"/goinfre/$USER/homebrew/bin"
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -29,6 +29,11 @@ ENABLE_CORRECTION="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+# Temporary fix to "Insecure completion-dependent directories detected"
+if [[ $(uname -s) == Darwin ]]; then
+	ZSH_DISABLE_COMPFIX=true
+fi
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -36,7 +41,7 @@ ENABLE_CORRECTION="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-syntax-highlighting)
 
-#source $ZSH/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -51,6 +56,8 @@ alias cclean="bash ~/Cleaner_42.sh"
 install_homebrew()
 install_brew_packages()
 install_ohmyzsh()
+install_omz_plugins()
+copy_dotfiles()
 
 if [[ -x $(command -v starship) ]]; then
 	eval "$(starship init zsh)"
