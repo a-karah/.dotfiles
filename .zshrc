@@ -53,11 +53,11 @@ alias code="open -a 'Visual Studio Code'"
 alias cclean="bash ~/Cleaner_42.sh"
 
 #-----INITIALIZATION-----#
-install_homebrew()
-install_brew_packages()
-install_ohmyzsh()
-install_omz_plugins()
-copy_dotfiles()
+install_homebrew
+install_brew_packages
+install_ohmyzsh
+install_omz_plugins
+copy_dotfiles
 
 if [[ -x $(command -v starship) ]]; then
 	eval "$(starship init zsh)"
