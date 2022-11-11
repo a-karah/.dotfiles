@@ -21,6 +21,7 @@ Plug 'pbondoer/vim-42header'
 "Plug 'ctrlpvim/ctrlp.vim'
 
 " Theme plugins
+Plug 'ayu-theme/ayu-vim'
 Plug 'jacoborus/tender.vim'
 Plug 'sjl/badwolf'
 Plug 'tomasr/molokai'
@@ -140,8 +141,8 @@ nnoremap <leader>t :set noet<CR>:%retab!<CR>
 set pastetoggle=<leader>p
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$\|\s+\s{1}/
-highlight MoreThan80 ctermbg=blue guibg=blue
-:2match MoreThan80 /\%81v.\+/
+" highlight MoreThan80 ctermbg=blue guibg=blue
+" :2match MoreThan80 /\%81v.\+/
 
 " Syntastic + Norminette
 " Enable norminette-vim (and gcc)
