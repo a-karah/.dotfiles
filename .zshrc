@@ -2,6 +2,13 @@
 
 source $HOME/.dotfiles/install_functions.sh
 
+#-----INITIALIZATION-----#
+install_homebrew
+install_brew_packages
+install_ohmyzsh
+install_omz_plugins
+copy_dotfiles
+
 # Temporary fix to "Insecure completion-dependent directories detected"
 if [[ $(uname -s) == Darwin ]]; then
 	ZSH_DISABLE_COMPFIX=true
@@ -51,13 +58,6 @@ alias zshrc="vim ~/.zshrc"
 alias gccc="gcc -Wall -Werror -Wextra -g"
 alias code="open -a 'Visual Studio Code'"
 alias cclean="bash ~/Cleaner_42.sh"
-
-#-----INITIALIZATION-----#
-install_homebrew
-install_brew_packages
-install_ohmyzsh
-install_omz_plugins
-copy_dotfiles
 
 if [[ -x $(command -v starship) ]]; then
 	eval "$(starship init zsh)"
