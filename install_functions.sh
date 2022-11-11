@@ -49,14 +49,20 @@ function install_brew_packages() {
 }
 
 function copy_dotfiles () {
-	if check_shasum .vimrc $HOME/vimrc; then
-		cp .vimrc $HOME/vimrc
+	if check_shasum $HOME/.dotfiles/.vimrc $HOME/.vimrc; then
+		echo "Copying vimrc to home directory"
+		cp $HOME/.dotfiles/.vimrc $HOME/vimrc
+		echo "Done copying"
 	fi
-	if check_shasum alacritty.yml $HOME/.config/alacritty/alacritty.yml; then
-		cp alacritty.yml $HOME/.config/alacritty/alacritty.yml
+	if check_shasum $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml; then
+		echo "Copying alacritty to config directory"
+		cp $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+		echo "Done copying"
 	fi
-	if check_shasum .zshrc $HOME/zshrc; then
-		cp .zshrc $HOME/zshrc
+	if check_shasum $HOME/.dotfiles/.zshrc $HOME/.zshrc; then
+		echo "Copying zshrc to home directory"
+		cp $HOME/.dotfiles/.zshrc $HOME/zshrc
+		echo "Done copying"
 	fi
 }
 
