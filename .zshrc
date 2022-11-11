@@ -16,8 +16,6 @@ export USER="akarahan"
 export MAIL="akarahan@student.42istanbul.com.tr"
 export ZSH="$HOME/.oh-my-zsh"
 
-source $ZSH/oh-my-zsh.sh
-
 # Setting path
 PATH=$PATH:~/.local/bin
 PATH=$PATH:"/goinfre/$USER/homebrew/bin"
@@ -42,6 +40,8 @@ ENABLE_CORRECTION="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git macos zsh-syntax-highlighting)
+
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
