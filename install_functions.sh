@@ -51,7 +51,7 @@ function install_brew_packages() {
 function copy_dotfiles () {
 	if check_shasum $HOME/.dotfiles/.vimrc $HOME/.vimrc; then
 		echo "Copying vimrc to home directory"
-		cp $HOME/.dotfiles/.vimrc $HOME/vimrc
+		cp $HOME/.dotfiles/.vimrc $HOME/.vimrc
 		echo "Done copying"
 	fi
 	if check_shasum $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml; then
