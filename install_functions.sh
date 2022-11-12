@@ -1,8 +1,7 @@
 #!/bin/bash
 
-source $HOME/.dotfiles/utils.sh
-
-export brew_bin=/goinfre/$USER/homebrew/bin/brew
+source $HOME/.dotfiles/env_vars.sh
+source $DOTFILES_PATH/utils.sh
 
 # Install homebrew into goinfre
 function install_homebrew() {
@@ -19,7 +18,7 @@ function install_homebrew() {
 function install_brew_packages() {
 	if ! [ -x "$(command -v wget)" ]; then
 		echo "Installing wget"
-		$brew_bin install wget
+		$BREW install wget
 		echo "wget is installed"
 	fi
 
@@ -30,13 +29,13 @@ function install_brew_packages() {
 
 	if  ! [ -x "$(command -v dark-mode)" ]; then
 		echo "Installing dark-mode"
-		$brew_bin install dark-mode
+		$BREW install dark-mode
 		echo "dark-mode is installed"
 	fi
 
 	if  ! [ -x "$(command -v starship)" ]; then
 		echo "Installing starship"
-		$brew_bin install starship
+		$BREW install starship
 		#echo "eval \"\$(starship init zsh)\"" >> ~/.zshrc
 		echo "starship is installed"
 	fi
@@ -49,19 +48,19 @@ function install_brew_packages() {
 }
 
 function copy_dotfiles () {
-	if check_shasum $HOME/.dotfiles/.vimrc $HOME/.vimrc; then
+	if check_shasum $DOTFILES_PATH/.vimrc $HOME/.vimrc; then
 		echo "Copying vimrc to home directory"
-		cp $HOME/.dotfiles/.vimrc $HOME/.vimrc
+		cp $DOTFILES_PATH/.vimrc $HOME/.vimrc
 		echo "Done copying"
 	fi
-	if check_shasum $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml; then
+	if check_shasum $DOTFILES_PATH/alacritty.yml $HOME/.config/alacritty/alacritty.yml; then
 		echo "Copying alacritty to config directory"
-		cp $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+		cp $DOTFILES_PATH/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 		echo "Done copying"
 	fi
-	if check_shasum $HOME/.dotfiles/.zshrc $HOME/.zshrc; then
+	if check_shasum $DOTFILES_PATH/.zshrc $HOME/.zshrc; then
 		echo "Copying zshrc to home directory"
-		cp $HOME/.dotfiles/.zshrc $HOME/.zshrc
+		cp $DOTFILES_PATH/.zshrc $HOME/.zshrc
 		echo "Done copying"
 	fi
 }
