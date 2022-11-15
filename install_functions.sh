@@ -2,7 +2,7 @@
 
 source $HOME/.dotfiles/utils.sh
 
-export brew_bin=/goinfre/$USER/homebrew/bin/brew
+export BREW=/goinfre/$USER/homebrew/bin/brew
 
 # Install homebrew into goinfre
 function install_homebrew() {
@@ -19,7 +19,7 @@ function install_homebrew() {
 function install_brew_packages() {
 	if ! [ -x "$(command -v wget)" ]; then
 		echo "Installing wget"
-		$brew_bin install wget
+		$BREW install wget
 		echo "wget is installed"
 	fi
 
@@ -30,20 +30,20 @@ function install_brew_packages() {
 
 	if  ! [ -x "$(command -v dark-mode)" ]; then
 		echo "Installing dark-mode"
-		$brew_bin install dark-mode
+		$BREW install dark-mode
 		echo "dark-mode is installed"
 	fi
 
 	if  ! [ -x "$(command -v starship)" ]; then
 		echo "Installing starship"
-		$brew_bin install starship
+		$BREW install starship
 		#echo "eval \"\$(starship init zsh)\"" >> ~/.zshrc
 		echo "starship is installed"
 	fi
 
 	# if  ! [ -x "$(command -v alacritty)" ]; then
 	# 	echo "Installing alacritty"
-	# 	$brew_bin install alacritty
+	# 	$BREW install alacritty
 	# 	echo "alacritty is installed"
 	# fi
 }
