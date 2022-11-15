@@ -67,9 +67,15 @@ function copy_dotfiles() {
 }
 
 function create_symlink_to_dotfiles() {
-	ln -sfn $HOME/.dotfiles/.zshrc $HOME/.zshrc
-	ln -sfn $HOME/.dotfiles/.vimrc $HOME/.zshrc
-	ln -sfn $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+	if [[ ! -f $HOME/.zshrc ]]; then
+		ln -sfn $HOME/.dotfiles/.zshrc $HOME/.zshrc
+	fi
+	if [[ ! -f $HOME/.vimrc ]]; then
+		ln -sfn $HOME/.dotfiles/.vimrc $HOME/.vimrc
+	fi
+	if [[ ! -f $HOME/.config/alacritty/alacritty.yml ]]; then
+		ln -sfn $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+	fi
 }
 
 # Various scripts
