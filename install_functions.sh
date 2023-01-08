@@ -1,7 +1,8 @@
 #!/bin/bash
 
-source $HOME/.dotfiles/env_vars.sh
-source $DOTFILES_PATH/utils.sh
+source $HOME/.dotfiles/utils.sh
+
+export BREW=/goinfre/$USER/homebrew/bin/brew
 
 # Install homebrew into goinfre
 function install_homebrew() {
@@ -42,13 +43,13 @@ function install_brew_packages() {
 
 	# if  ! [ -x "$(command -v alacritty)" ]; then
 	# 	echo "Installing alacritty"
-	# 	$brew_bin install alacritty
+	# 	$BREW install alacritty
 	# 	echo "alacritty is installed"
 	# fi
 }
 
-function copy_dotfiles () {
-	if check_shasum $DOTFILES_PATH/.vimrc $HOME/.vimrc; then
+function copy_dotfiles() {
+	if check_shasum $HOME/.dotfiles/.vimrc $HOME/.vimrc; then
 		echo "Copying vimrc to home directory"
 		cp $DOTFILES_PATH/.vimrc $HOME/.vimrc
 		echo "Done copying"
@@ -62,6 +63,18 @@ function copy_dotfiles () {
 		echo "Copying zshrc to home directory"
 		cp $DOTFILES_PATH/.zshrc $HOME/.zshrc
 		echo "Done copying"
+	fi
+}
+
+function create_symlink_to_dotfiles() {
+	if [[ ! -f $HOME/.zshrc ]]; then
+		ln -sfn $HOME/.dotfiles/.zshrc $HOME/.zshrc
+	fi
+	if [[ ! -f $HOME/.vimrc ]]; then
+		ln -sfn $HOME/.dotfiles/.vimrc $HOME/.vimrc
+	fi
+	if [[ ! -f $HOME/.config/alacritty/alacritty.yml ]]; then
+		ln -sfn $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 	fi
 }
 

@@ -57,7 +57,7 @@ install_homebrew
 install_brew_packages
 install_ohmyzsh
 install_omz_plugins
-copy_dotfiles
+# copy_dotfiles
 
 if [[ -x $(command -v starship) ]]; then
 	eval "$(starship init zsh)"
