@@ -1,0 +1,6 @@
+# These dotfiles target macOS/Linux — keep LF line endings everywhere,
+# even when checked out on Windows (git-bash needs LF for shell scripts).
+* text=auto eol=lf
+
+# Fonts are binary; never touch their bytes.
+*.ttf binary
