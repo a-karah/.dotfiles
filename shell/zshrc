@@ -2,19 +2,24 @@
 # Thin zsh config — shared settings live in shell/shared.sh,
 # platform/campus specifics in os/.
 
-DOTFILES="$HOME/.dotfiles"
+DOTFILES_PATH="$HOME/.dotfiles"
 
 # Temporary fix to "Insecure completion-dependent directories detected"
 if [[ "$(uname -s)" == Darwin ]]; then
 	ZSH_DISABLE_COMPFIX=true
 fi
 
-source "$DOTFILES/lib/utils.sh"
+# All sourcing is guarded so a partial checkout can't break shell startup.
+if [[ -f "$DOTFILES_PATH/lib/utils.sh" ]]; then
+	source "$DOTFILES_PATH/lib/utils.sh"
 
-# 42 school: campus env + auto-bootstrap (idempotent; /goinfre gets wiped)
-if is_42; then
-	source "$DOTFILES/os/macos/42.sh"
-	bootstrap_42
+	# 42 school: campus env + auto-bootstrap (idempotent; /goinfre gets wiped)
+	if is_42 && [[ -f "$DOTFILES_PATH/os/macos/42.sh" ]]; then
+		source "$DOTFILES_PATH/os/macos/42.sh"
+		bootstrap_42
+	fi
+else
+	echo "dotfiles: missing $DOTFILES_PATH/lib/utils.sh" >&2
 fi
 
 #-----OH-MY-ZSH-----#
@@ -26,4 +31,6 @@ if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
 	source "$ZSH/oh-my-zsh.sh"
 fi
 
-source "$DOTFILES/shell/shared.sh"
+if [[ -f "$DOTFILES_PATH/shell/shared.sh" ]]; then
+	source "$DOTFILES_PATH/shell/shared.sh"
+fi
