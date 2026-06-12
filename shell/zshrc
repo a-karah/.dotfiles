@@ -1,0 +1,29 @@
+#!/bin/zsh
+# Thin zsh config — shared settings live in shell/shared.sh,
+# platform/campus specifics in os/.
+
+DOTFILES="$HOME/.dotfiles"
+
+# Temporary fix to "Insecure completion-dependent directories detected"
+if [[ "$(uname -s)" == Darwin ]]; then
+	ZSH_DISABLE_COMPFIX=true
+fi
+
+source "$DOTFILES/lib/utils.sh"
+
+# 42 school: campus env + auto-bootstrap (idempotent; /goinfre gets wiped)
+if is_42; then
+	source "$DOTFILES/os/macos/42.sh"
+	bootstrap_42
+fi
+
+#-----OH-MY-ZSH-----#
+export ZSH="$HOME/.oh-my-zsh"
+CASE_SENSITIVE="true"
+ENABLE_CORRECTION="true"
+plugins=(git macos zsh-syntax-highlighting)
+if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
+	source "$ZSH/oh-my-zsh.sh"
+fi
+
+source "$DOTFILES/shell/shared.sh"
