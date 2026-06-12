@@ -12,7 +12,7 @@ alias cclean="bash ~/Cleaner_42.sh"
 # /goinfre is wiped regularly, so re-run the (idempotent) installers on
 # shell startup — fast no-ops when everything is already in place.
 function bootstrap_42() {
-	source "$HOME/.dotfiles/os/macos/packages.sh"
+	source "${DOTFILES_PATH:-$HOME/.dotfiles}/os/macos/packages.sh"
 	install_macos_packages
 
 	if [ ! -d "$HOME/.oh-my-zsh" ]; then

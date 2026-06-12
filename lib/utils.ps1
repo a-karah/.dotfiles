@@ -26,7 +26,13 @@ function New-Link {
     if ($dir -and -not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
     $existing = Get-Item $Target -ErrorAction SilentlyContinue
     if ($existing -and $existing.LinkType -eq 'SymbolicLink') {
-        Remove-Item $Target -Force
+        if ("$($existing.Target)".StartsWith($script:DotfilesPath)) {
+            Remove-Item $Target -Force          # ours — refresh
+        } else {
+            $bak = "$Target.bak"
+            if (Test-Path $bak) { $bak = "$bak.$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())" }
+            Move-Item $Target $bak -Force       # foreign symlink — preserve it
+        }
     } elseif ($existing) {
         $bak = "$Target.bak"
         if (Test-Path $bak) {   # never clobber an earlier backup

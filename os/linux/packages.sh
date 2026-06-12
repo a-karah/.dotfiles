@@ -1,7 +1,7 @@
 #!/bin/bash
 # Linux (apt) package installation.
 
-source "$HOME/.dotfiles/lib/utils.sh"
+source "${DOTFILES_PATH:-$HOME/.dotfiles}/lib/utils.sh"
 
 function install_linux_packages() {
 	local pkg missing=()

@@ -18,6 +18,15 @@ for arg in "$@"; do
 	esac
 done
 
+if [ -z "${DOTFILES_OS:-}" ]; then
+	case "$(uname -s)" in
+		MINGW*|MSYS*|CYGWIN*)
+			echo "This is a POSIX installer; on Windows use install.ps1 instead." >&2
+			exit 2
+			;;
+	esac
+fi
+
 OS=$(detect_os)
 echo "Platform: $OS"
 

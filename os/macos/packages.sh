@@ -1,7 +1,7 @@
 #!/bin/bash
 # macOS package installation (brew). Used by install.sh and bootstrap_42.
 
-source "$HOME/.dotfiles/lib/utils.sh"
+source "${DOTFILES_PATH:-$HOME/.dotfiles}/lib/utils.sh"
 
 # Resolve the brew binary: 42 machines use the /goinfre workaround
 # (quota in $HOME), everything else a standard install.
