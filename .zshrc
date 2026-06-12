@@ -57,6 +57,7 @@ install_homebrew
 install_brew_packages
 install_ohmyzsh
 install_omz_plugins
+setup_claude_statusline
 # copy_dotfiles
 
 if [[ -x $(command -v starship) ]]; then

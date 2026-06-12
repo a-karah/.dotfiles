@@ -34,6 +34,13 @@ function install_brew_packages() {
 		echo "dark-mode is installed"
 	fi
 
+	# jq is required by the claude statusline script
+	if  ! [ -x "$(command -v jq)" ]; then
+		echo "Installing jq"
+		$BREW install jq
+		echo "jq is installed"
+	fi
+
 	if  ! [ -x "$(command -v starship)" ]; then
 		echo "Installing starship"
 		$BREW install starship
@@ -75,6 +82,38 @@ function create_symlink_to_dotfiles() {
 	fi
 	if [[ ! -f $HOME/.config/alacritty/alacritty.yml ]]; then
 		ln -sfn $HOME/.dotfiles/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+	fi
+}
+
+# Symlink the claude statusline script and wire it into settings.json.
+# settings.json is merged (not symlinked) so claude-managed keys (plugins,
+# theme, ...) are preserved; the statusLine block comes from the dotfiles
+# template as the single source of truth.
+function setup_claude_statusline() {
+	local claude_dir="$HOME/.claude"
+	local settings="$claude_dir/settings.json"
+	local template="$HOME/.dotfiles/claude/settings.json"
+	local desired='bash "$HOME/.claude/statusline.sh"'
+
+	mkdir -p "$claude_dir"
+	ln -sfn "$HOME/.dotfiles/claude/statusline.sh" "$claude_dir/statusline.sh"
+
+	# Skip if statusLine already points at our script (avoid churn on a
+	# file that claude rewrites itself).
+	if [ -f "$settings" ] && [ "$(jq -r '.statusLine.command // ""' "$settings" 2>/dev/null)" = "$desired" ]; then
+		return
+	fi
+
+	if [ -x "$(command -v jq)" ]; then
+		if [ -f "$settings" ]; then
+			local tmp=$(mktemp)
+			jq -s '.[0] * .[1]' "$settings" "$template" > "$tmp" && mv "$tmp" "$settings"
+		else
+			cp "$template" "$settings"
+		fi
+	else
+		# No jq: only create from template when there is nothing to preserve.
+		[ -f "$settings" ] || cp "$template" "$settings"
 	fi
 }
 
