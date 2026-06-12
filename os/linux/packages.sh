@@ -20,6 +20,6 @@ function install_linux_packages() {
 	# starship is not in (older) apt repos; use the official installer
 	if ! is_installed starship; then
 		echo "Installing starship"
-		curl -sS https://starship.rs/install.sh | sh -s -- -y
+		curl -fsSL https://starship.rs/install.sh | sh -s -- -y
 	fi
 }
