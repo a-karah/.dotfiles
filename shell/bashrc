@@ -1,0 +1,6 @@
+#!/bin/bash
+# Thin bash config — shared settings live in shell/shared.sh.
+
+if [ -f "$HOME/.dotfiles/shell/shared.sh" ]; then
+	source "$HOME/.dotfiles/shell/shared.sh"
+fi
