@@ -66,8 +66,14 @@ function merge_claude_settings() {
 	elif is_installed jq; then
 		local tmp
 		tmp=$(mktemp)
-		jq -s '.[0] * .[1]' "$settings" "$template" > "$tmp" && mv "$tmp" "$settings"
-		echo "wired statusLine into $settings"
+		if jq -s '.[0] * .[1]' "$settings" "$template" > "$tmp"; then
+			mv "$tmp" "$settings"
+			echo "wired statusLine into $settings"
+		else
+			rm -f "$tmp"
+			echo "error: failed to merge statusLine into $settings (invalid JSON?)" >&2
+			exit 1
+		fi
 	else
 		echo "warning: jq unavailable; statusLine not merged into existing $settings" >&2
 	fi
