@@ -3,6 +3,7 @@ input=$(cat)
 
 # --- muted palette ---
 RESET='\033[0m'
+BOLD='\033[1m'     # the live numbers, so they read over the muted chrome
 GRAY='\033[90m'    # chrome, labels, healthy values
 FG='\033[37m'      # model name (the one anchor)
 WARN='\033[33m'    # caution
@@ -64,13 +65,13 @@ out="${FG}${model}${RESET}"
 if [ -n "$ctx" ]; then
   c=$(round "$ctx")
   col=$(shade "$c" 70 85)
-  out="${out}${sep}${GRAY}ctx $(ctx_bar "$c" "$col") ${col}${c}%${RESET}"
+  out="${out}${sep}${GRAY}ctx $(ctx_bar "$c" "$col") ${BOLD}${col}${c}%${RESET}"
 fi
 
 # 5-hour window (+ reset countdown)
 if [ -n "$five" ]; then
   f=$(round "$five")
-  seg="${GRAY}5h $(shade "$f" 50 80)${f}%${RESET}"
+  seg="${GRAY}5h ${BOLD}$(shade "$f" 50 80)${f}%${RESET}"
   if [ -n "$five_reset" ]; then
     left=$(( $(round "$five_reset") - $(date +%s) ))
     if [ "$left" -gt 0 ]; then
@@ -85,7 +86,7 @@ fi
 # 7-day window
 if [ -n "$week" ]; then
   w=$(round "$week")
-  out="${out}${sep}${GRAY}7d $(shade "$w" 50 80)${w}%${RESET}"
+  out="${out}${sep}${GRAY}7d ${BOLD}$(shade "$w" 50 80)${w}%${RESET}"
 fi
 
 printf '%b' "$out"
