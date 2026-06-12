@@ -92,11 +92,11 @@ function create_symlink_to_dotfiles() {
 function setup_claude_statusline() {
 	local claude_dir="$HOME/.claude"
 	local settings="$claude_dir/settings.json"
-	local template="$HOME/.dotfiles/claude/settings.json"
+	local template="$HOME/.dotfiles/config/claude/settings.json"
 	local desired='bash "$HOME/.claude/statusline.sh"'
 
 	mkdir -p "$claude_dir"
-	ln -sfn "$HOME/.dotfiles/claude/statusline.sh" "$claude_dir/statusline.sh"
+	ln -sfn "$HOME/.dotfiles/config/claude/statusline.sh" "$claude_dir/statusline.sh"
 
 	# Skip if statusLine already points at our script (avoid churn on a
 	# file that claude rewrites itself).
