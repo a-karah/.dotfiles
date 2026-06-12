@@ -6,7 +6,8 @@ function Test-SymlinkPrivilege {
     $probe = Join-Path ([IO.Path]::GetTempPath()) "dotfiles-symlink-probe"
     try {
         Remove-Item $probe -Force -ErrorAction SilentlyContinue
-        New-Item -ItemType SymbolicLink -Path $probe -Target $PSCommandPath -ErrorAction Stop | Out-Null
+        # target need not exist; this only tests the privilege
+        New-Item -ItemType SymbolicLink -Path $probe -Target "$probe.target" -ErrorAction Stop | Out-Null
         Remove-Item $probe -Force
         return $true
     } catch {
@@ -22,12 +23,16 @@ function New-Link {
     if (-not (Test-Path $src)) { throw "New-Link: missing source $src" }
     if ($DryRun) { Write-Host "[dry-run] link $Target -> $src"; return }
     $dir = Split-Path -Parent $Target
-    if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
+    if ($dir -and -not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
     $existing = Get-Item $Target -ErrorAction SilentlyContinue
     if ($existing -and $existing.LinkType -eq 'SymbolicLink') {
         Remove-Item $Target -Force
     } elseif ($existing) {
-        Move-Item $Target "$Target.bak" -Force
+        $bak = "$Target.bak"
+        if (Test-Path $bak) {   # never clobber an earlier backup
+            $bak = "$bak.$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())"
+        }
+        Move-Item $Target $bak -Force
     }
     New-Item -ItemType SymbolicLink -Path $Target -Target $src | Out-Null
     Write-Host "linked $Target -> $src"
