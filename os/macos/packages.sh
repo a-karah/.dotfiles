@@ -23,7 +23,7 @@ function install_homebrew_42() {
 	if [ ! -d "/goinfre/$USER/homebrew" ]; then
 		echo "Installing homebrew into /goinfre/$USER"
 		mkdir -p "/goinfre/$USER/homebrew"
-		curl -L https://github.com/Homebrew/brew/tarball/master |
+		curl -fL https://github.com/Homebrew/brew/tarball/master |
 			tar xz --strip 1 -C "/goinfre/$USER/homebrew"
 	fi
 }
