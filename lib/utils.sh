@@ -1,6 +1,6 @@
 #!/bin/bash
 # Shared helpers for the dotfiles installers and rc files.
-# Safe to source from rc files: defines functions/vars only, no side effects.
+# Safe to source from rc files: defines functions and sets DOTFILES_PATH if unset.
 
 DOTFILES_PATH="${DOTFILES_PATH:-$HOME/.dotfiles}"
 
@@ -29,19 +29,20 @@ function is_installed() {
 # - target already links into the repo -> relink (heals links to old repo paths)
 # - target is a real file, or a foreign symlink -> back up to <target>.bak first
 function link_file() {
-	local src="$DOTFILES_PATH/$1" dst="$2"
+	local src="$DOTFILES_PATH/$1" dst="$2" bak="$2.bak"
 	if [ ! -e "$src" ]; then
 		echo "link_file: missing source $src" >&2
 		return 1
 	fi
+	[ -e "$bak" ] && bak="$bak.$(date +%s)"   # never clobber an earlier backup
 	mkdir -p "$(dirname "$dst")"
 	if [ -L "$dst" ]; then
 		case "$(readlink "$dst")" in
 			"$DOTFILES_PATH"/*) ;;            # ours — refresh below
-			*) mv "$dst" "$dst.bak" ;;        # foreign symlink — preserve it
+			*) mv "$dst" "$bak" ;;            # foreign symlink — preserve it
 		esac
 	elif [ -e "$dst" ]; then
-		mv "$dst" "$dst.bak"                  # real file — preserve it
+		mv "$dst" "$bak"                      # real file — preserve it
 	fi
 	ln -sfn "$src" "$dst"
 	echo "linked $dst -> $src"
