@@ -23,6 +23,23 @@ Both installers are idempotent — re-run them any time. Flags: `--dry-run` /
 `-DryRun` (print actions only), `--skip-packages` / `-SkipPackages` (links and
 settings only).
 
+## Uninstall
+
+```sh
+./uninstall.sh                    # macOS / Linux / WSL
+.\uninstall.ps1                   # Windows
+```
+
+Removes only the symlinks this repo created (links pointing elsewhere are left
+alone), restoring any `<name>.bak` backup that was set aside at install time. It
+also strips the `statusLine` block from `~/.claude/settings.json` (deleting the
+file only if that leaves it empty) and, on macOS, unloads the login launch
+agent. Installed packages are **not** removed — tools like `jq`/`wget` may be
+used elsewhere. Add `--dry-run` / `-DryRun` to preview first.
+
+The uninstaller is a thin wrapper over `install.sh --uninstall` /
+`install.ps1 -Uninstall` (same engine, single source of truth).
+
 ## Layout
 
 | Path | What lives there |

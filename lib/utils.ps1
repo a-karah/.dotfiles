@@ -44,6 +44,50 @@ function New-Link {
     Write-Host "linked $Target -> $src"
 }
 
+# Remove-Link: inverse of New-Link —
+# our symlink -> remove it, then restore $Target.bak if present;
+# real file or foreign link -> leave it alone.
+function Remove-Link {
+    param([string]$Target, [switch]$DryRun)
+    if ($DryRun) { Write-Host "[dry-run] unlink $Target"; return }
+    $existing = Get-Item $Target -ErrorAction SilentlyContinue
+    if (-not $existing) { return }
+    if ($existing.LinkType -ne 'SymbolicLink') {
+        Write-Host "skip $Target — real file, not a link we made"; return
+    }
+    if (-not "$($existing.Target)".StartsWith($script:DotfilesPath)) {
+        Write-Host "skip $Target — foreign link (-> $($existing.Target))"; return
+    }
+    Remove-Item $Target -Force
+    Write-Host "removed $Target"
+    $bak = "$Target.bak"
+    if (Test-Path $bak) {
+        Move-Item $bak $Target -Force
+        Write-Host "restored $Target from $bak"
+    }
+}
+
+# Inverse of Merge-ClaudeStatusLine: drop the statusLine block if (and only if)
+# it points at our statusline, leaving other settings untouched. If that empties
+# the file, remove it — the file was ours to begin with.
+function Remove-ClaudeStatusLine {
+    param([switch]$DryRun)
+    $settingsPath = Join-Path $HOME ".claude\settings.json"
+    if (-not (Test-Path $settingsPath)) { return }
+    $desired = 'bash "{0}/.claude/statusline.sh"' -f ($HOME -replace '\\', '/')
+    $settings = Get-Content $settingsPath -Raw | ConvertFrom-Json
+    if (-not ($settings.statusLine -and $settings.statusLine.command -eq $desired)) { return }
+    if ($DryRun) { Write-Host "[dry-run] remove statusLine from $settingsPath"; return }
+    $settings.PSObject.Properties.Remove('statusLine')
+    if (@($settings.PSObject.Properties).Count -eq 0) {
+        Remove-Item $settingsPath -Force
+        Write-Host "removed statusLine; deleted now-empty $settingsPath"
+    } else {
+        $settings | ConvertTo-Json -Depth 16 | Set-Content $settingsPath
+        Write-Host "removed statusLine from $settingsPath"
+    }
+}
+
 # Merge the statusLine block into ~/.claude/settings.json without touching
 # other keys. Windows quirk: the command string must contain a RESOLVED
 # path ($HOME literal would only expand under a POSIX shell).

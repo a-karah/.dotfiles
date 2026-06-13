@@ -47,3 +47,28 @@ function link_file() {
 	ln -sfn "$src" "$dst"
 	echo "linked $dst -> $src"
 }
+
+# unlink_file <repo-relative-source> <absolute-target>
+# Inverse of link_file:
+# - target links into the repo -> remove it, then restore <target>.bak if present
+# - target is a real file or a foreign symlink -> leave it alone
+function unlink_file() {
+	local dst="$2" bak="$2.bak"
+	if [ ! -L "$dst" ]; then
+		[ -e "$dst" ] && echo "skip $dst — real file, not a link we made"
+		return 0
+	fi
+	case "$(readlink "$dst")" in
+		"$DOTFILES_PATH"/*)
+			rm -f "$dst"
+			echo "removed $dst"
+			if [ -e "$bak" ]; then
+				mv "$bak" "$dst"
+				echo "restored $dst from $bak"
+			fi
+			;;
+		*)
+			echo "skip $dst — foreign link (-> $(readlink "$dst"))"
+			;;
+	esac
+}
