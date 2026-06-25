@@ -28,11 +28,33 @@ if (Get-Command fnm -ErrorAction SilentlyContinue) {
 
 #-----PROFILE OVERLAY (personal | work)-----#
 # Context-specific settings live in os/windows/<profile>.ps1 and load only when
-# $env:DOTFILES_PROFILE selects them. Set it once per machine, e.g.:
-#   [Environment]::SetEnvironmentVariable('DOTFILES_PROFILE','work','User')
-# Unset -> shared profile only (no overlay, no guessing).
+# $env:DOTFILES_PROFILE selects them. Pick with Set-DotfilesProfile (below);
+# unset -> shared profile only (no overlay, no guessing).
 $dotfilesProfile = $env:DOTFILES_PROFILE
 if ($dotfilesProfile -in @('personal', 'work')) {
     $overlay = Join-Path $DotfilesPath "os\windows\$dotfilesProfile.ps1"
     if (Test-Path $overlay) { . $overlay }
+}
+
+# Set-DotfilesProfile [personal|work] — persist the choice for this user and
+# reload the current shell. No argument => pick interactively.
+function Set-DotfilesProfile {
+    [CmdletBinding()]
+    param([ValidateSet('personal', 'work')][string]$Name)
+
+    if (-not $Name) {
+        $options = [System.Management.Automation.Host.ChoiceDescription[]]@(
+            (New-Object System.Management.Automation.Host.ChoiceDescription '&personal'),
+            (New-Object System.Management.Automation.Host.ChoiceDescription '&work')
+        )
+        $current = if ($env:DOTFILES_PROFILE -eq 'work') { 1 } else { 0 }
+        $Name = @('personal', 'work')[
+            $Host.UI.PromptForChoice('Dotfiles profile', 'Which profile should this machine use?', $options, $current)
+        ]
+    }
+
+    [Environment]::SetEnvironmentVariable('DOTFILES_PROFILE', $Name, 'User')
+    $env:DOTFILES_PROFILE = $Name
+    Write-Host "dotfiles profile -> $Name (reloading shell)"
+    if (Test-Path $PROFILE) { . $PROFILE }
 }

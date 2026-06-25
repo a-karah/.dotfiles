@@ -55,13 +55,12 @@ personal data. Anything machine-private (secrets, proxy) lives solely in the
 untracked `profile.local.ps1`. Git name/email come from the global gitconfig,
 not from committed files.
 
-## Selection setup (manual, documented)
+## Selection
 
-Set once per machine:
-
-```powershell
-[Environment]::SetEnvironmentVariable('DOTFILES_PROFILE','work','User')   # or 'personal'
-```
+`Set-DotfilesProfile [personal|work]` (defined in `shell/profile.ps1`, so it is
+available in every shell) persists `$env:DOTFILES_PROFILE` for the user and
+reloads the current shell; with no argument it prompts. Unset → shared profile
+only.
 
 ## Out of scope (YAGNI)
 
