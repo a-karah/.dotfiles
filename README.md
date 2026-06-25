@@ -86,6 +86,15 @@ Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific �
   It persists the choice for your user and reloads the current shell. Optionally
   copy `os/windows/profile.local.ps1.example` to `profile.local.ps1` for any
   machine-private settings (proxy, tokens, …).
+- **Prompt engine (Windows).** oh-my-posh is the default and wins whenever it's
+  installed; starship is the fallback. Force one with `$env:DOTFILES_PROMPT`
+  (`oh-my-posh` / `starship`) — handy when both are installed but you want
+  starship. Switch with the `Set-DotfilesPrompt` helper (persists the choice and
+  reloads the shell):
+
+  ```powershell
+  Set-DotfilesPrompt starship   # or 'oh-my-posh'; no argument => pick interactively
+  ```
 - **42 auto-bootstrap.** `/goinfre` gets wiped regularly, so on 42 machines the
   zshrc re-runs the (idempotent) installers on shell startup — homebrew into
   goinfre, packages, oh-my-zsh. Everywhere else, setup only happens when you
