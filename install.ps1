@@ -40,6 +40,13 @@ if ($Uninstall) {
     New-Link -Source 'shell/profile.ps1' -Target $PROFILE -DryRun:$DryRun
 }
 
+#-----PROFILE SELECTION-----#
+if ($Uninstall) {
+    Remove-DotfilesProfile -DryRun:$DryRun
+} else {
+    Select-DotfilesProfile -DryRun:$DryRun
+}
+
 #-----PACKAGES-----#
 if ($Uninstall) {
     Write-Host "Leaving installed packages in place (uninstall does not remove them)."

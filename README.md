@@ -33,9 +33,10 @@ settings only).
 Removes only the symlinks this repo created (links pointing elsewhere are left
 alone), restoring any `<name>.bak` backup that was set aside at install time. It
 also strips the `statusLine` block from `~/.claude/settings.json` (deleting the
-file only if that leaves it empty) and, on macOS, unloads the login launch
-agent. Installed packages are **not** removed — tools like `jq`/`wget` may be
-used elsewhere. Add `--dry-run` / `-DryRun` to preview first.
+file only if that leaves it empty), on macOS unloads the login launch agent, and
+on Windows clears the `DOTFILES_PROFILE` env var. Installed packages are **not**
+removed — tools like `jq`/`wget` may be used elsewhere. Add `--dry-run` /
+`-DryRun` to preview first.
 
 The uninstaller is a thin wrapper over `install.sh --uninstall` /
 `install.ps1 -Uninstall` (same engine, single source of truth).
@@ -72,8 +73,9 @@ Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific �
   chosen by `$env:DOTFILES_PROFILE` (`personal`/`work`), set once per machine.
   The overlays are committed but name-free; machine-private settings (proxy,
   tokens, …) go in the gitignored `os/windows/profile.local.ps1`. Git name/email
-  stay in your global gitconfig. Unset variable → shared profile only. Pick the
-  profile with the `Set-DotfilesProfile` helper (loaded by the profile):
+  stay in your global gitconfig. Unset variable → shared profile only.
+  `install.ps1` prompts for the profile on first run; switch any time with the
+  `Set-DotfilesProfile` helper (loaded by the profile):
 
   ```powershell
   Set-DotfilesProfile work     # or 'personal'; no argument => pick interactively

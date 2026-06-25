@@ -32,7 +32,11 @@ New (committed):
 
 Modified:
 
-- `shell/profile.ps1` — add a "PROFILE OVERLAY" section.
+- `shell/profile.ps1` — load the overlay and define the `Set-DotfilesProfile`
+  switcher.
+- `lib/utils.ps1` — `Select-DotfilesProfile` (install-time prompt) and
+  `Remove-DotfilesProfile` (clears the var on uninstall).
+- `install.ps1` — prompt for the profile during setup; clear it on `-Uninstall`.
 - `README.md` — document the overlay in the layout table and "How it works".
 
 ## Mechanism
@@ -57,13 +61,15 @@ not from committed files.
 
 ## Selection
 
-`Set-DotfilesProfile [personal|work]` (defined in `shell/profile.ps1`, so it is
-available in every shell) persists `$env:DOTFILES_PROFILE` for the user and
-reloads the current shell; with no argument it prompts. Unset → shared profile
-only.
+On first run, `install.ps1` prompts for the profile (`Select-DotfilesProfile` in
+`lib/utils.ps1`) and persists it to the user-scope env var — idempotent (skips
+when already set or when the session can't prompt; `-DryRun` previews). To switch
+later, `Set-DotfilesProfile [personal|work]` (defined in `shell/profile.ps1`, so
+available in every shell) persists `$env:DOTFILES_PROFILE` and reloads the
+current shell; with no argument it prompts. `install.ps1 -Uninstall` clears the
+var. Unset → shared profile only.
 
 ## Out of scope (YAGNI)
 
-- No installer step to auto-set the env var.
 - No auto-detection (domain join, hostname, etc.).
 - No changes to the unix side.

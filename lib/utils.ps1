@@ -110,3 +110,45 @@ function Merge-ClaudeStatusLine {
     $settings | ConvertTo-Json -Depth 16 | Set-Content $settingsPath
     Write-Host "wired statusLine into $settingsPath"
 }
+
+# Select-DotfilesProfile: first-run prompt to pick the personal/work profile and
+# persist it to the user-scope DOTFILES_PROFILE env var. Idempotent — skips when
+# already set, and skips gracefully when the session can't prompt.
+function Select-DotfilesProfile {
+    param([switch]$DryRun)
+    $current = [Environment]::GetEnvironmentVariable('DOTFILES_PROFILE', 'User')
+    if ($current -in @('personal', 'work')) {
+        Write-Host "profile: $current (already set — change with Set-DotfilesProfile)"
+        return
+    }
+    $options = [System.Management.Automation.Host.ChoiceDescription[]]@(
+        (New-Object System.Management.Automation.Host.ChoiceDescription '&personal'),
+        (New-Object System.Management.Automation.Host.ChoiceDescription '&work'),
+        (New-Object System.Management.Automation.Host.ChoiceDescription '&skip', 'decide later')
+    )
+    try {
+        $choice = $Host.UI.PromptForChoice('Dotfiles profile', 'Which profile is this machine?', $options, 0)
+    } catch {
+        Write-Host "profile: not set (non-interactive — run Set-DotfilesProfile later)"
+        return
+    }
+    if ($choice -eq 2) {
+        Write-Host "profile: skipped (set later with Set-DotfilesProfile)"
+        return
+    }
+    $name = @('personal', 'work')[$choice]
+    if ($DryRun) { Write-Host "[dry-run] set DOTFILES_PROFILE=$name (User scope)"; return }
+    [Environment]::SetEnvironmentVariable('DOTFILES_PROFILE', $name, 'User')
+    $env:DOTFILES_PROFILE = $name
+    Write-Host "profile: $name (open a new shell to apply)"
+}
+
+# Inverse of Select-DotfilesProfile: clear the user-scope DOTFILES_PROFILE var.
+function Remove-DotfilesProfile {
+    param([switch]$DryRun)
+    $current = [Environment]::GetEnvironmentVariable('DOTFILES_PROFILE', 'User')
+    if (-not $current) { return }
+    if ($DryRun) { Write-Host "[dry-run] clear DOTFILES_PROFILE (was $current)"; return }
+    [Environment]::SetEnvironmentVariable('DOTFILES_PROFILE', $null, 'User')
+    Write-Host "cleared DOTFILES_PROFILE (was $current)"
+}
