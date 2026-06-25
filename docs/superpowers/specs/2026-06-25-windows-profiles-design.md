@@ -14,8 +14,9 @@ separate per machine. Mirrors the existing macOS pattern (`shell/shared.sh` +
 - **Selection:** `$env:DOTFILES_PROFILE` (`personal` | `work`), set once per
   machine. No auto-detection — explicit only. Unset → shared profile only.
 - **Tracking / hide-the-name:** `personal.ps1` and `work.ps1` are committed but
-  contain no personal name/identity. Real name/email live in a gitignored local
-  file (`os/windows/profile.local.ps1`).
+  contain no personal name/identity. Machine-private settings live in a
+  gitignored local file (`os/windows/profile.local.ps1`); git name/email stay in
+  the global gitconfig (the current environment already has them there).
 
 ## Files
 
@@ -23,8 +24,8 @@ New (committed):
 
 - `os/windows/personal.ps1` — personal-context overlay, name-free.
 - `os/windows/work.ps1` — work-context overlay, name-free.
-- `os/windows/profile.local.ps1.example` — template for the local identity file
-  (placeholders only).
+- `os/windows/profile.local.ps1.example` — template for the local machine-private
+  settings file (proxy/tokens/PATH); git name/email stay in the global gitconfig.
 - `config/oh-my-posh/emodipt-extend.omp.json` — oh-my-posh theme, copied in-repo
   so the prompt is managed and portable (no literal name — fully templated).
 - `.gitignore` (repo root) — ignores `os/windows/profile.local.ps1`.
@@ -43,16 +44,16 @@ Modified:
    **whitelists** it to `personal`/`work`, and dot-sources
    `os/windows/<profile>.ps1` if the file exists (guarded).
 3. The chosen overlay dot-sources `os/windows/profile.local.ps1` if present —
-   that gitignored file sets the real git identity (via `GIT_AUTHOR_*` /
-   `GIT_COMMITTER_*` env vars, so nothing is written to the global gitconfig and
-   identity stays scoped to the active context).
+   that gitignored file holds machine-private settings (proxy, tokens, PATH).
+   Git name/email are not managed here; they come from the global gitconfig.
 4. `$env:DOTFILES_PROFILE` unset → no overlay loads (shared profile only).
 
 ## Hide-the-name
 
 Committed overlays carry only structure, comments, and env-driven logic — zero
-personal data. The actual name/email exist solely in the untracked
-`profile.local.ps1`; the committed `.example` shows the shape with placeholders.
+personal data. Anything machine-private (secrets, proxy) lives solely in the
+untracked `profile.local.ps1`. Git name/email come from the global gitconfig,
+not from committed files.
 
 ## Selection setup (manual, documented)
 

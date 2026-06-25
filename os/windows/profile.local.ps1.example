@@ -1,14 +1,9 @@
 # Machine-local profile values — COPY this to profile.local.ps1 (gitignored)
 # and fill in. Dot-sourced by personal.ps1 / work.ps1.
-# Keep your real name, email, and any secrets ONLY in the copy, never here.
+# Keep any secrets ONLY in the copy, never here.
+#
+# Git name/email are NOT set here — they come from your global gitconfig
+# (~/.gitconfig). Only override them below if a specific machine needs to.
 
-#-----GIT IDENTITY-----#
-# Scoped to shells where this profile loads (no write to the global gitconfig,
-# so the other context never inherits it).
-$env:GIT_AUTHOR_NAME  = '<your name>'
-$env:GIT_AUTHOR_EMAIL = '<your email>'
-$env:GIT_COMMITTER_NAME  = $env:GIT_AUTHOR_NAME
-$env:GIT_COMMITTER_EMAIL = $env:GIT_AUTHOR_EMAIL
-
-#-----OTHER MACHINE-PRIVATE SETTINGS-----#
+#-----MACHINE-PRIVATE SETTINGS-----#
 # e.g. $env:HTTP_PROXY = '...'  /  API tokens  /  machine-specific PATH entries.

@@ -70,9 +70,17 @@ Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific �
 - **Windows profiles.** `shell/profile.ps1` (shared prompt/modules/fnm) loads a
   per-context overlay — `os/windows/personal.ps1` or `os/windows/work.ps1` —
   chosen by `$env:DOTFILES_PROFILE` (`personal`/`work`), set once per machine.
-  The overlays are committed but name-free; real identity (name/email) lives in
-  `os/windows/profile.local.ps1`, which is gitignored. Copy
-  `profile.local.ps1.example` to start. Unset variable → shared profile only.
+  The overlays are committed but name-free; machine-private settings (proxy,
+  tokens, …) go in the gitignored `os/windows/profile.local.ps1`. Git name/email
+  stay in your global gitconfig. Unset variable → shared profile only. To
+  activate on a machine:
+
+  ```powershell
+  [Environment]::SetEnvironmentVariable('DOTFILES_PROFILE','work','User')   # or 'personal'
+  # optional — only if the machine needs private settings (proxy, tokens, …):
+  Copy-Item "$HOME\.dotfiles\os\windows\profile.local.ps1.example" "$HOME\.dotfiles\os\windows\profile.local.ps1"
+  # then open a new shell
+  ```
 - **42 auto-bootstrap.** `/goinfre` gets wiped regularly, so on 42 machines the
   zshrc re-runs the (idempotent) installers on shell startup — homebrew into
   goinfre, packages, oh-my-zsh. Everywhere else, setup only happens when you
