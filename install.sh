@@ -139,6 +139,42 @@ else
 	merge_claude_settings
 fi
 
+#-----GIT PERF CONFIG-----#
+# Layer config/gitconfig-perf onto the global gitconfig via an [include] entry,
+# so our performance defaults apply to every repo without rewriting the user's
+# own settings. Idempotent; skips when git is unavailable.
+function include_git_perf() {
+	local perf="$DOTFILES_PATH/config/gitconfig-perf"
+	is_installed git && [ -f "$perf" ] || return 0
+	if git config --global --get-all --fixed-value include.path "$perf" >/dev/null 2>&1; then
+		return 0
+	fi
+	if $DRY_RUN; then
+		echo "[dry-run] git config --global --add include.path $perf"
+		return 0
+	fi
+	git config --global --add include.path "$perf"
+	echo "git: linked perf config into global gitconfig"
+}
+
+function uninclude_git_perf() {
+	local perf="$DOTFILES_PATH/config/gitconfig-perf"
+	is_installed git || return 0
+	git config --global --get-all --fixed-value include.path "$perf" >/dev/null 2>&1 || return 0
+	if $DRY_RUN; then
+		echo "[dry-run] git config --global --unset-all include.path $perf"
+		return 0
+	fi
+	git config --global --unset-all --fixed-value include.path "$perf"
+	echo "git: removed perf config from global gitconfig"
+}
+
+if $UNINSTALL; then
+	uninclude_git_perf
+else
+	include_git_perf
+fi
+
 #-----MACOS LAUNCH AGENT-----#
 # Runs ~/.macos.sh (defaults) at login; replaces the old init_mac.sh.
 if [ "$OS" = macos ]; then

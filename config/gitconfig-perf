@@ -1,0 +1,12 @@
+# Git performance defaults - machine-agnostic, name-free, safe to share.
+# The installer adds an [include] entry for this file to your global gitconfig,
+# so these layer on top of (never replace) your own ~/.gitconfig.
+# Requires git >= 2.37 (built-in fsmonitor daemon).
+[core]
+	# Filesystem monitor + caches: avoid re-stat'ing the whole work tree on
+	# every status/diff - the main win in large repos.
+	fsmonitor = true
+	untrackedCache = true
+	# fscache is Git-for-Windows only; other platforms ignore the unknown key.
+	fscache = true
+	preloadIndex = true

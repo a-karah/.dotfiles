@@ -62,4 +62,11 @@ if ($Uninstall) {
     Merge-ClaudeStatusLine -DryRun:$DryRun
 }
 
+#-----GIT PERF CONFIG-----#
+if ($Uninstall) {
+    Remove-GitPerfInclude -DryRun:$DryRun
+} else {
+    Add-GitPerfInclude -DryRun:$DryRun
+}
+
 Write-Host $(if ($Uninstall) { "Uninstalled." } else { "Done." })

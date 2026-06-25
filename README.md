@@ -49,7 +49,7 @@ The uninstaller is a thin wrapper over `install.sh --uninstall` /
 | `links.conf` | declarative link map — `<platform> <repo-path> <target>` — read by both installers |
 | `lib/` | helpers: platform detection, safe symlinking (`utils.sh`), PowerShell twins (`utils.ps1`) |
 | `shell/` | `shared.sh` (aliases, env, starship — sourced by zsh *and* bash), thin `zshrc`/`bashrc`, `profile.ps1` |
-| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline, starship, oh-my-posh themes (per profile) |
+| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline, starship, `gitconfig-perf`, oh-my-posh themes (per profile) |
 | `os/macos/` | brew packages, `defaults.sh` (system prefs), launch agent, 42-school env (`42.sh`) |
 | `os/linux/` | apt packages |
 | `os/windows/` | winget packages; `personal.ps1` / `work.ps1` profile overlays |
@@ -107,6 +107,13 @@ Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific �
   oh-my-posh on Windows; `dark-mode` on macOS. On Windows the installer asks
   before each missing package (non-interactive runs install all). Missing
   package managers warn and continue — links always come first.
+- **Git performance.** `config/gitconfig-perf` (built-in `fsmonitor`, untracked
+  cache, `fscache`, `preloadIndex`) is layered onto your global gitconfig via an
+  `[include]` entry the installer adds — so every repo gets a faster
+  `status`/`diff` without the installer ever rewriting your personal
+  `~/.gitconfig`. Needs git ≥ 2.37; `--uninstall` removes just that include.
+  Note: heavyweight EDR/antivirus (e.g. CrowdStrike) scans every `git.exe`
+  launch and dominates prompt latency — only an AV exclusion (via IT) fixes that.
 
 ## Notes
 

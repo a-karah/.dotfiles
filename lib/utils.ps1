@@ -152,3 +152,30 @@ function Remove-DotfilesProfile {
     [Environment]::SetEnvironmentVariable('DOTFILES_PROFILE', $null, 'User')
     Write-Host "cleared DOTFILES_PROFILE (was $current)"
 }
+
+# Layer config/gitconfig-perf onto the user's *global* gitconfig via an
+# [include] entry, so our performance defaults apply to every repo without ever
+# rewriting the user's own settings. Idempotent; needs git (skips otherwise).
+function Add-GitPerfInclude {
+    param([switch]$DryRun)
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) { return }
+    $perf = (Join-Path $script:DotfilesPath 'config/gitconfig-perf') -replace '\\', '/'
+    if (-not (Test-Path $perf)) { return }
+    if (@(git config --global --get-all --fixed-value include.path $perf 2>$null).Count -gt 0) {
+        Write-Host "git: perf config already included"; return
+    }
+    if ($DryRun) { Write-Host "[dry-run] git config --global --add include.path $perf"; return }
+    git config --global --add include.path $perf
+    Write-Host "git: linked perf config into global gitconfig"
+}
+
+# Inverse of Add-GitPerfInclude: drop just our include.path entry.
+function Remove-GitPerfInclude {
+    param([switch]$DryRun)
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) { return }
+    $perf = (Join-Path $script:DotfilesPath 'config/gitconfig-perf') -replace '\\', '/'
+    if (@(git config --global --get-all --fixed-value include.path $perf 2>$null).Count -eq 0) { return }
+    if ($DryRun) { Write-Host "[dry-run] git config --global --unset-all include.path $perf"; return }
+    git config --global --unset-all --fixed-value include.path $perf
+    Write-Host "git: removed perf config from global gitconfig"
+}
