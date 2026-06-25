@@ -48,10 +48,10 @@ The uninstaller is a thin wrapper over `install.sh --uninstall` /
 | `links.conf` | declarative link map — `<platform> <repo-path> <target>` — read by both installers |
 | `lib/` | helpers: platform detection, safe symlinking (`utils.sh`), PowerShell twins (`utils.ps1`) |
 | `shell/` | `shared.sh` (aliases, env, starship — sourced by zsh *and* bash), thin `zshrc`/`bashrc`, `profile.ps1` |
-| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline |
+| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline, oh-my-posh theme |
 | `os/macos/` | brew packages, `defaults.sh` (system prefs), launch agent, 42-school env (`42.sh`) |
 | `os/linux/` | apt packages |
-| `os/windows/` | winget packages |
+| `os/windows/` | winget packages; `personal.ps1` / `work.ps1` profile overlays |
 | `fonts/` | Blex Mono Nerd Font |
 
 Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific →
@@ -67,6 +67,12 @@ Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific �
   `shell/shared.sh` for everything common. Campus-specific config
   (`USER`/`MAIL`, goinfre brew PATH) lives in `os/macos/42.sh` and is only
   sourced on 42 machines (detected via `/goinfre`).
+- **Windows profiles.** `shell/profile.ps1` (shared prompt/modules/fnm) loads a
+  per-context overlay — `os/windows/personal.ps1` or `os/windows/work.ps1` —
+  chosen by `$env:DOTFILES_PROFILE` (`personal`/`work`), set once per machine.
+  The overlays are committed but name-free; real identity (name/email) lives in
+  `os/windows/profile.local.ps1`, which is gitignored. Copy
+  `profile.local.ps1.example` to start. Unset variable → shared profile only.
 - **42 auto-bootstrap.** `/goinfre` gets wiped regularly, so on 42 machines the
   zshrc re-runs the (idempotent) installers on shell startup — homebrew into
   goinfre, packages, oh-my-zsh. Everywhere else, setup only happens when you
