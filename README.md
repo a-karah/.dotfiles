@@ -49,7 +49,7 @@ The uninstaller is a thin wrapper over `install.sh --uninstall` /
 | `links.conf` | declarative link map — `<platform> <repo-path> <target>` — read by both installers |
 | `lib/` | helpers: platform detection, safe symlinking (`utils.sh`), PowerShell twins (`utils.ps1`) |
 | `shell/` | `shared.sh` (aliases, env, starship — sourced by zsh *and* bash), thin `zshrc`/`bashrc`, `profile.ps1` |
-| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline, oh-my-posh themes (per profile) |
+| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline, starship, oh-my-posh themes (per profile) |
 | `os/macos/` | brew packages, `defaults.sh` (system prefs), launch agent, 42-school env (`42.sh`) |
 | `os/linux/` | apt packages |
 | `os/windows/` | winget packages; `personal.ps1` / `work.ps1` profile overlays |

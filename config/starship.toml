@@ -1,0 +1,7 @@
+# Shared starship config (linked to ~/.config/starship.toml on every platform).
+# Minimal for now: raise command_timeout so `git status` in large repos — and on
+# Windows machines where antivirus scans every git.exe call — doesn't time out at
+# starship's 500ms default and spam warnings. (It's a ceiling, not a fixed wait:
+# a fast git still renders immediately.) The prompt is still starship's default
+# look; a port of the oh-my-posh theme can be layered in here later.
+command_timeout = 2000
