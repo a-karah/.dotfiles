@@ -51,12 +51,8 @@ if ($Uninstall) {
 if ($Uninstall) {
     Write-Host "Leaving installed packages in place (uninstall does not remove them)."
 } elseif (-not $SkipPackages) {
-    if ($DryRun) {
-        Write-Host "[dry-run] install windows packages"
-    } else {
-        . (Join-Path $PSScriptRoot 'os/windows/packages.ps1')
-        Install-WindowsPackages
-    }
+    . (Join-Path $PSScriptRoot 'os/windows/packages.ps1')
+    Install-WindowsPackages -DryRun:$DryRun
 }
 
 #-----CLAUDE STATUSLINE-----#

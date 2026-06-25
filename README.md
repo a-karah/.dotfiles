@@ -94,9 +94,10 @@ Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific �
   context bar · rate-limit windows) is linked to `~/.claude/statusline.sh` and
   wired into `~/.claude/settings.json` by merging just the `statusLine` block —
   the rest of your settings is left alone.
-- **Packages.** starship, jq, wget everywhere (brew / apt / winget);
-  `dark-mode` on macOS. Missing package managers warn and continue — links
-  always come first.
+- **Packages.** starship, jq, wget everywhere (brew / apt / winget), plus
+  oh-my-posh on Windows; `dark-mode` on macOS. On Windows the installer asks
+  before each missing package (non-interactive runs install all). Missing
+  package managers warn and continue — links always come first.
 
 ## Notes
 
