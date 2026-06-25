@@ -6,11 +6,14 @@ $DotfilesPath = if ($env:DOTFILES_PATH) { $env:DOTFILES_PATH } else { Join-Path 
 
 #-----PROMPT-----#
 # oh-my-posh is the prompt of choice on Windows; starship is the fallback
-# (and the prompt used by the bash/zsh side of these dotfiles). The theme is
-# managed in-repo; fall back to the bundled copy if the checkout is missing.
+# (and the prompt used by the bash/zsh side of these dotfiles). Themes are
+# managed in-repo, one folder per profile (config/oh-my-posh/<profile>); the
+# active profile's *.omp.json is used, falling back to the bundled theme.
 if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
-    $poshTheme = Join-Path $DotfilesPath 'config\oh-my-posh\emodipt-extend.omp.json'
-    if (-not (Test-Path $poshTheme)) { $poshTheme = Join-Path $env:POSH_THEMES_PATH 'emodipt-extend.omp.json' }
+    $poshProfile = if ($env:DOTFILES_PROFILE -in @('personal', 'work')) { $env:DOTFILES_PROFILE } else { 'personal' }
+    $poshTheme = Get-ChildItem (Join-Path $DotfilesPath "config\oh-my-posh\$poshProfile") -Filter *.omp.json -ErrorAction SilentlyContinue |
+        Select-Object -First 1 -ExpandProperty FullName
+    if (-not $poshTheme) { $poshTheme = Join-Path $env:POSH_THEMES_PATH 'emodipt-extend.omp.json' }
     oh-my-posh init pwsh --config $poshTheme | Invoke-Expression
 } elseif (Get-Command starship -ErrorAction SilentlyContinue) {
     Invoke-Expression (&starship init powershell)

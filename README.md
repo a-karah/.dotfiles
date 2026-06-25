@@ -49,7 +49,7 @@ The uninstaller is a thin wrapper over `install.sh --uninstall` /
 | `links.conf` | declarative link map — `<platform> <repo-path> <target>` — read by both installers |
 | `lib/` | helpers: platform detection, safe symlinking (`utils.sh`), PowerShell twins (`utils.ps1`) |
 | `shell/` | `shared.sh` (aliases, env, starship — sourced by zsh *and* bash), thin `zshrc`/`bashrc`, `profile.ps1` |
-| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline, oh-my-posh theme |
+| `config/` | shared configs: vim, tmux, ctags, alacritty, claude statusline, oh-my-posh themes (per profile) |
 | `os/macos/` | brew packages, `defaults.sh` (system prefs), launch agent, 42-school env (`42.sh`) |
 | `os/linux/` | apt packages |
 | `os/windows/` | winget packages; `personal.ps1` / `work.ps1` profile overlays |
@@ -73,9 +73,11 @@ Placement rule: shared → `config/` or `shell/shared.sh` · platform-specific �
   chosen by `$env:DOTFILES_PROFILE` (`personal`/`work`), set once per machine.
   The overlays are committed but name-free; machine-private settings (proxy,
   tokens, …) go in the gitignored `os/windows/profile.local.ps1`. Git name/email
-  stay in your global gitconfig. Unset variable → shared profile only.
-  `install.ps1` prompts for the profile on first run; switch any time with the
-  `Set-DotfilesProfile` helper (loaded by the profile):
+  stay in your global gitconfig. Each profile also gets its own oh-my-posh prompt
+  theme under `config/oh-my-posh/<profile>/` (the folder's `*.omp.json` is used).
+  Unset variable → shared profile only (personal theme). `install.ps1` prompts
+  for the profile on first run; switch any time with the `Set-DotfilesProfile`
+  helper (loaded by the profile):
 
   ```powershell
   Set-DotfilesProfile work     # or 'personal'; no argument => pick interactively

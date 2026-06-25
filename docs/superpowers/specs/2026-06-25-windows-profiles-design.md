@@ -26,8 +26,9 @@ New (committed):
 - `os/windows/work.ps1` — work-context overlay, name-free.
 - `os/windows/profile.local.ps1.example` — template for the local machine-private
   settings file (proxy/tokens/PATH); git name/email stay in the global gitconfig.
-- `config/oh-my-posh/emodipt-extend.omp.json` — oh-my-posh theme, copied in-repo
-  so the prompt is managed and portable (no literal name — fully templated).
+- `config/oh-my-posh/personal/` and `config/oh-my-posh/work/` — per-profile
+  oh-my-posh themes (seeded from the bundled emodipt-extend; no literal name —
+  fully templated). The active profile's `*.omp.json` is used.
 - `.gitignore` (repo root) — ignores `os/windows/profile.local.ps1`.
 
 Modified:
@@ -41,8 +42,9 @@ Modified:
 
 ## Mechanism
 
-1. `$PROFILE` (symlink) → `shell/profile.ps1` on every PowerShell start; the
-   existing prompt/modules/fnm sections are untouched.
+1. `$PROFILE` (symlink) → `shell/profile.ps1` on every PowerShell start. The
+   prompt picks the oh-my-posh theme from `config/oh-my-posh/<profile>/` based on
+   `$env:DOTFILES_PROFILE` (unset → personal, then the bundled theme).
 2. The new section resolves the repo path the repo's way
    (`$env:DOTFILES_PATH` else `$HOME\.dotfiles`), reads `$env:DOTFILES_PROFILE`,
    **whitelists** it to `personal`/`work`, and dot-sources
